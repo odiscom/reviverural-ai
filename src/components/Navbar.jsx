@@ -1,88 +1,103 @@
 import React from 'react';
-import { Heart, Sparkles, Cross, Flame } from 'lucide-react';
+import { 
+  Sprout, 
+  BarChart3, 
+  FileText, 
+  Camera,
+  Target,
+  Zap, 
+  Store, 
+  Bot, 
+  MapPin, 
+  Sun, 
+  Moon, 
+  Sparkles 
+} from 'lucide-react';
 
-export default function Navbar({ 
-  activeTab, 
-  setActiveTab, 
-  onOpenDonateModal, 
-  onOpenPrayerModal 
-}) {
+export default function Navbar({ activeTab, setActiveTab, theme, toggleTheme, currentCounty, setCountyModalOpen }) {
   const navItems = [
-    { id: 'home', label: 'Home' },
-    { id: 'devotionals', label: 'Devotionals' },
-    { id: 'topics', label: 'Topics' },
-    { id: 'prayers', label: 'Prayer Requests' },
-    { id: 'faithai', label: 'Faith Assistant', sparkle: true },
-    { id: 'cms', label: 'CMS ADMIN', highlight: true }
+    { id: 'dashboard', label: 'Vitality Dashboard', icon: BarChart3 },
+    { id: 'bids', label: 'Bid Analyzer', icon: FileText, highlight: true },
+    { id: 'assessments', label: 'Property Vision', icon: Camera, highlight: true },
+    { id: 'hunter', label: 'Opportunity Hunter', icon: Target, highlight: true },
+    { id: 'grants', label: 'Grant Matcher', icon: Sparkles },
+    { id: 'agtech', label: 'Precision AgTech', icon: Sprout },
+    { id: 'microgrid', label: 'Microgrid Planner', icon: Zap },
+    { id: 'mainstreet', label: 'Main Street', icon: Store },
+    { id: 'ruraliq', label: 'RuralIQ AI', icon: Bot }
   ];
 
   return (
-    <header className="goddome-header">
-      <div className="header-container">
-        {/* Brand Logo matching screenshot */}
-        <div className="brand-logo" onClick={() => setActiveTab('home')}>
-          <div className="logo-shield">
-            <span className="shield-cross">†</span>
-            <Flame size={18} className="shield-flame" />
+    <header className="navbar-header">
+      <div className="navbar-container">
+        {/* Brand */}
+        <div className="brand-logo" onClick={() => setActiveTab('dashboard')}>
+          <div className="logo-icon-wrapper">
+            <Sprout className="logo-icon" size={24} />
           </div>
           <div className="logo-text-group">
-            <div className="logo-title-row">
-              <span className="cross-prefix">†</span>
-              <span className="brand-name">GodDome</span>
-              <span className="cross-suffix">☥</span>
-            </div>
-            <span className="brand-byline">Words For Your Soul by Jeanna' Mead</span>
+            <span className="brand-title">ReviveRural<span className="brand-ai">.us</span></span>
+            <span className="brand-tagline">Municipal Mowing & Land AI</span>
           </div>
         </div>
 
-        {/* Center Nav Items matching screenshot */}
-        <nav className="header-nav">
-          {navItems.map(item => {
+        {/* Location / County Selector */}
+        <div className="county-badge" onClick={() => setCountyModalOpen(true)} title="Click to switch county context">
+          <MapPin size={15} className="pin-icon" />
+          <span>{currentCounty}</span>
+          <span className="live-indicator">LIVE</span>
+        </div>
+
+        {/* Navigation Tabs */}
+        <nav className="nav-menu">
+          {navItems.map((item) => {
+            const Icon = item.icon;
             const isActive = activeTab === item.id;
             return (
               <button
                 key={item.id}
                 onClick={() => setActiveTab(item.id)}
-                className={`nav-link ${isActive ? 'active' : ''} ${item.highlight ? 'cms-link' : ''}`}
+                className={`nav-link ${isActive ? 'active' : ''} ${item.highlight ? 'featured-nav' : ''}`}
               >
+                <Icon size={17} />
                 <span>{item.label}</span>
-                {item.sparkle && <Sparkles size={13} className="sparkle-icon" />}
               </button>
             );
           })}
         </nav>
 
-        {/* Right CTA Buttons matching screenshot */}
-        <div className="header-actions">
-          <button className="btn-donate-gold" onClick={onOpenDonateModal}>
-            <Heart size={14} fill="#1a0f02" />
-            <span>DONATE</span>
+        {/* Right Utility Buttons */}
+        <div className="nav-actions">
+          <button className="theme-toggle-btn" onClick={toggleTheme} title="Toggle Dark/Light Mode">
+            {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
           </button>
-          <button className="btn-request-crimson" onClick={onOpenPrayerModal}>
-            <span>REQUEST PRAYER</span>
+
+          <button className="btn btn-primary nav-cta-btn" onClick={() => setActiveTab('bids')}>
+            <FileText size={16} />
+            <span>Analyze RFP</span>
           </button>
         </div>
       </div>
 
       <style>{`
-        .goddome-header {
+        .navbar-header {
           position: sticky;
           top: 0;
           z-index: 100;
-          background: rgba(5, 10, 22, 0.88);
+          background: rgba(9, 19, 13, 0.88);
           backdrop-filter: blur(20px);
           -webkit-backdrop-filter: blur(20px);
-          border-bottom: 1px solid rgba(251, 191, 36, 0.15);
+          border-bottom: 1px solid var(--border-color);
         }
 
-        .header-container {
-          max-width: 1400px;
+        .navbar-container {
+          max-width: 1480px;
           margin: 0 auto;
-          padding: 16px 28px;
+          padding: 12px 24px;
           display: flex;
           align-items: center;
           justify-content: space-between;
-          gap: 20px;
+          gap: 12px;
         }
 
         .brand-logo {
@@ -92,179 +107,148 @@ export default function Navbar({
           cursor: pointer;
         }
 
-        .logo-shield {
-          width: 40px;
-          height: 44px;
-          border-radius: 10px;
-          background: linear-gradient(135deg, rgba(251, 191, 36, 0.2) 0%, rgba(217, 119, 6, 0.35) 100%);
-          border: 1px solid rgba(251, 191, 36, 0.5);
+        .logo-icon-wrapper {
+          width: 42px;
+          height: 42px;
+          border-radius: 12px;
+          background: linear-gradient(135deg, rgba(16, 185, 129, 0.25) 0%, rgba(5, 150, 105, 0.4) 100%);
+          border: 1px solid rgba(16, 185, 129, 0.5);
           display: flex;
           align-items: center;
           justify-content: center;
-          position: relative;
-          box-shadow: 0 0 16px rgba(251, 191, 36, 0.2);
+          color: #34d399;
+          box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
         }
 
-        .shield-cross {
-          color: #fbbf24;
-          font-size: 1.2rem;
-          font-weight: bold;
-        }
-
-        .shield-flame {
-          position: absolute;
-          top: 4px;
-          right: 4px;
-          color: #f59e0b;
-        }
-
-        .logo-text-group {
-          display: flex;
-          flex-direction: column;
-        }
-
-        .logo-title-row {
-          display: flex;
-          align-items: center;
-          gap: 6px;
-        }
-
-        .cross-prefix, .cross-suffix {
-          color: #fbbf24;
-          font-size: 1.1rem;
-        }
-
-        .brand-name {
-          font-family: var(--font-brand);
-          font-size: 1.4rem;
-          font-weight: 700;
+        .brand-title {
+          font-size: 1.35rem;
+          font-weight: 800;
           color: #ffffff;
-          letter-spacing: 0.04em;
+          letter-spacing: -0.01em;
+          line-height: 1;
         }
 
-        .brand-byline {
-          font-size: 0.72rem;
-          color: #ebd5b3;
-          font-style: italic;
-          letter-spacing: 0.02em;
+        .brand-ai {
+          color: #10b981;
         }
 
-        .header-nav {
+        .brand-tagline {
+          font-size: 0.7rem;
+          color: var(--text-secondary);
+          display: block;
+          margin-top: 2px;
+          font-weight: 600;
+          letter-spacing: 0.05em;
+          text-transform: uppercase;
+        }
+
+        .county-badge {
           display: flex;
           align-items: center;
-          gap: 22px;
+          gap: 8px;
+          background: rgba(16, 185, 129, 0.1);
+          border: 1px solid rgba(16, 185, 129, 0.25);
+          padding: 6px 12px;
+          border-radius: 999px;
+          font-size: 0.8rem;
+          font-weight: 600;
+          color: #a7f3d0;
+          cursor: pointer;
+          transition: all 0.2s ease;
+        }
+
+        .county-badge:hover {
+          background: rgba(16, 185, 129, 0.2);
+          border-color: rgba(16, 185, 129, 0.5);
+        }
+
+        .pin-icon { color: #10b981; }
+
+        .live-indicator {
+          background: #10b981;
+          color: #042f2e;
+          font-size: 0.65rem;
+          font-weight: 800;
+          padding: 1px 6px;
+          border-radius: 4px;
+        }
+
+        .nav-menu {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+          background: rgba(14, 28, 20, 0.6);
+          padding: 4px;
+          border-radius: var(--radius-md);
+          border: 1px solid var(--border-color);
+          overflow-x: auto;
         }
 
         .nav-link {
-          background: none;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          padding: 7px 12px;
+          border-radius: var(--radius-sm);
+          background: transparent;
           border: none;
-          color: #ebd5b3;
-          font-size: 0.92rem;
+          color: var(--text-secondary);
+          font-size: 0.82rem;
           font-weight: 600;
           cursor: pointer;
           transition: all 0.2s ease;
-          display: flex;
-          align-items: center;
-          gap: 6px;
-          position: relative;
-          padding: 6px 0;
+          white-space: nowrap;
         }
 
         .nav-link:hover {
-          color: #fbbf24;
+          color: var(--text-primary);
+          background: rgba(255, 255, 255, 0.05);
         }
 
         .nav-link.active {
+          background: linear-gradient(135deg, rgba(16, 185, 129, 0.25) 0%, rgba(5, 150, 105, 0.3) 100%);
           color: #ffffff;
-          font-weight: 700;
+          border: 1px solid rgba(16, 185, 129, 0.4);
+          box-shadow: 0 0 12px rgba(16, 185, 129, 0.2);
         }
 
-        .nav-link.active::after {
-          content: '';
-          position: absolute;
-          bottom: 0;
-          left: 0;
-          right: 0;
-          height: 2px;
-          background: #fbbf24;
-          border-radius: 2px;
-          box-shadow: 0 0 8px #fbbf24;
+        .featured-nav {
+          color: #34d399;
         }
 
-        .cms-link {
-          font-size: 0.8rem;
-          letter-spacing: 0.08em;
-          color: #fbbf24;
-        }
-
-        .sparkle-icon {
-          color: #fbbf24;
-          animation: pulseGlow 1.8s infinite ease-in-out;
-        }
-
-        .header-actions {
+        .nav-actions {
           display: flex;
           align-items: center;
-          gap: 12px;
+          gap: 10px;
         }
 
-        .btn-donate-gold {
-          display: inline-flex;
+        .theme-toggle-btn {
+          width: 36px;
+          height: 36px;
+          border-radius: 10px;
+          background: var(--bg-glass);
+          border: 1px solid var(--border-color);
+          color: var(--text-primary);
+          display: flex;
           align-items: center;
-          gap: 6px;
-          padding: 9px 18px;
-          border-radius: 999px;
-          background: #fbbf24;
-          color: #1a0f02;
-          font-size: 0.82rem;
-          font-weight: 800;
-          letter-spacing: 0.05em;
-          border: none;
+          justify-content: center;
           cursor: pointer;
-          box-shadow: 0 4px 14px rgba(251, 191, 36, 0.4);
           transition: all 0.2s ease;
         }
 
-        .btn-donate-gold:hover {
-          transform: translateY(-2px);
-          background: #fef08a;
-          box-shadow: 0 6px 20px rgba(251, 191, 36, 0.6);
+        .theme-toggle-btn:hover {
+          background: rgba(34, 197, 94, 0.15);
+          border-color: var(--border-glow);
         }
 
-        .btn-request-crimson {
-          display: inline-flex;
-          align-items: center;
-          padding: 9px 20px;
-          border-radius: 999px;
-          background: #be123c;
-          color: #ffffff;
-          font-size: 0.82rem;
-          font-weight: 800;
-          letter-spacing: 0.05em;
-          border: none;
-          cursor: pointer;
-          box-shadow: 0 4px 14px rgba(190, 18, 60, 0.4);
-          transition: all 0.2s ease;
-        }
-
-        .btn-request-crimson:hover {
-          transform: translateY(-2px);
-          background: #e11d48;
-          box-shadow: 0 6px 20px rgba(190, 18, 60, 0.6);
-        }
-
-        @media (max-width: 1024px) {
-          .header-nav {
-            gap: 12px;
-          }
-          .brand-byline {
-            display: none;
-          }
+        @media (max-width: 1200px) {
+          .nav-link span { display: none; }
+          .nav-link { padding: 7px 9px; }
+          .brand-tagline { display: none; }
         }
         @media (max-width: 768px) {
-          .header-nav {
-            display: none;
-          }
+          .county-badge { display: none; }
+          .navbar-container { padding: 10px 16px; }
         }
       `}</style>
     </header>

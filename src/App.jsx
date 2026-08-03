@@ -1,164 +1,186 @@
-import React, { useState } from 'react';
-import StarryBackground from './components/StarryBackground';
+import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
-import HomeHub from './components/HomeHub';
-import DevotionalsGallery from './components/DevotionalsGallery';
-import DevotionalReaderModal from './components/DevotionalReaderModal';
-import TopicExplorer from './components/TopicExplorer';
-import PrayerWall from './components/PrayerWall';
-import FaithAssistant from './components/FaithAssistant';
-import CMSAdmin from './components/CMSAdmin';
-import DonateModal from './components/DonateModal';
-import RequestPrayerModal from './components/RequestPrayerModal';
-import { DEVOTIONALS_DATA } from './data/devotionalsData';
-import { PRAYERS_DATA } from './data/prayersData';
-import { Flame, Heart } from 'lucide-react';
+import Dashboard from './components/Dashboard';
+import MunicipalBidAnalyzer from './components/MunicipalBidAnalyzer';
+import PropertyAssessmentVision from './components/PropertyAssessmentVision';
+import MunicipalOpportunityHunter from './components/MunicipalOpportunityHunter';
+import GrantMatcher from './components/GrantMatcher';
+import AgTechHub from './components/AgTechHub';
+import MicrogridPlanner from './components/MicrogridPlanner';
+import MainStreetHub from './components/MainStreetHub';
+import RuralIQAssistant from './components/RuralIQAssistant';
+import { MapPin, Globe, Sparkles } from 'lucide-react';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState('home');
-  const [devotionalsList, setDevotionalsList] = useState(DEVOTIONALS_DATA);
-  const [selectedDevotional, setSelectedDevotional] = useState(null);
-  const [donateModalOpen, setDonateModalOpen] = useState(false);
-  const [prayerModalOpen, setPrayerModalOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState('bids'); // Default to Bid Analyzer for Municipal Mowing core workflow
+  const [theme, setTheme] = useState('dark');
+  const [currentCounty, setCurrentCounty] = useState('Jasper County, IA');
+  const [countyModalOpen, setCountyModalOpen] = useState(false);
 
-  const handlePublishNewDevotional = (newDev) => {
-    setDevotionalsList(prev => [newDev, ...prev]);
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(prev => (prev === 'dark' ? 'light' : 'dark'));
   };
+
+  const sampleCounties = [
+    'Jasper County, IA',
+    'Smith County, TX',
+    'Harris County, TX',
+    'Linn County, IA',
+    'Rock County, MN',
+    'Knox County, IL'
+  ];
 
   return (
     <div className="app-container">
-      {/* Dynamic Starry Canvas Background */}
-      <StarryBackground />
-
-      {/* Header Navigation */}
+      {/* Top Navbar */}
       <Navbar 
         activeTab={activeTab}
         setActiveTab={setActiveTab}
-        onOpenDonateModal={() => setDonateModalOpen(true)}
-        onOpenPrayerModal={() => setPrayerModalOpen(true)}
+        theme={theme}
+        toggleTheme={toggleTheme}
+        currentCounty={currentCounty}
+        setCountyModalOpen={setCountyModalOpen}
       />
 
       {/* Main Tab Content */}
       <main className="main-content">
-        {activeTab === 'home' && (
-          <HomeHub 
-            setActiveTab={setActiveTab}
-            onOpenReaderModal={(dev) => setSelectedDevotional(dev)}
-            onOpenDonateModal={() => setDonateModalOpen(true)}
-          />
-        )}
-
-        {activeTab === 'devotionals' && (
-          <DevotionalsGallery 
-            onOpenReaderModal={(dev) => setSelectedDevotional(dev)}
-          />
-        )}
-
-        {activeTab === 'topics' && (
-          <TopicExplorer 
-            onOpenReaderModal={(dev) => setSelectedDevotional(dev)}
-            setActiveTab={setActiveTab}
-          />
-        )}
-
-        {activeTab === 'prayers' && (
-          <PrayerWall 
-            onOpenPrayerModal={() => setPrayerModalOpen(true)}
-          />
-        )}
-
-        {activeTab === 'faithai' && (
-          <FaithAssistant 
-            onOpenReaderModal={(dev) => setSelectedDevotional(dev)}
-          />
-        )}
-
-        {activeTab === 'cms' && (
-          <CMSAdmin 
-            onPublishNewDevotional={handlePublishNewDevotional}
-          />
-        )}
+        {activeTab === 'dashboard' && <Dashboard setActiveTab={setActiveTab} />}
+        {activeTab === 'bids' && <MunicipalBidAnalyzer />}
+        {activeTab === 'assessments' && <PropertyAssessmentVision />}
+        {activeTab === 'hunter' && <MunicipalOpportunityHunter setActiveTab={setActiveTab} />}
+        {activeTab === 'grants' && <GrantMatcher setActiveTab={setActiveTab} />}
+        {activeTab === 'agtech' && <AgTechHub />}
+        {activeTab === 'microgrid' && <MicrogridPlanner />}
+        {activeTab === 'mainstreet' && <MainStreetHub />}
+        {activeTab === 'ruraliq' && <RuralIQAssistant currentCounty={currentCounty} />}
       </main>
 
       {/* Footer */}
       <footer className="app-footer">
         <div className="footer-container">
           <div className="footer-brand">
-            <span className="footer-title">† GodDome ☥</span>
-            <span className="footer-byline">Words For Your Soul by Jeanna' Mead</span>
+            <span className="footer-title">ReviveRural<span className="brand-ai">.us</span></span>
+            <span className="footer-copy">© 2026 Revive Rural AI Platform. Municipal Mowing & Land Management AI.</span>
           </div>
 
-          <p className="footer-copyright">
-            © 2026 GodDome.org • Fireside Devotionals & Christian Stories. All rights reserved.
-          </p>
+          <div className="footer-links">
+            <span className="footer-badge badge-emerald">
+              <Globe size={13} /> Target Domain: ai.reviverural.us
+            </span>
+          </div>
         </div>
       </footer>
 
-      {/* Devotional Reader Modal */}
-      {selectedDevotional && (
-        <DevotionalReaderModal 
-          devotional={selectedDevotional}
-          onClose={() => setSelectedDevotional(null)}
-        />
-      )}
+      {/* County Switcher Modal */}
+      {countyModalOpen && (
+        <div className="modal-overlay" onClick={() => setCountyModalOpen(false)}>
+          <div className="modal-content glass-card county-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <div className="flex-center">
+                <MapPin size={20} className="icon-emerald" />
+                <h3 className="modal-title">Select County / Region Context</h3>
+              </div>
+              <button className="modal-close-btn" onClick={() => setCountyModalOpen(false)}>×</button>
+            </div>
 
-      {/* Donate Modal */}
-      {donateModalOpen && (
-        <DonateModal 
-          onClose={() => setDonateModalOpen(false)}
-        />
-      )}
+            <p className="subtitle" style={{ marginBottom: '16px' }}>
+              Select a jurisdiction to update local GIS telemetry, municipal bid listings, and parcel datasets.
+            </p>
 
-      {/* Request Prayer Modal */}
-      {prayerModalOpen && (
-        <RequestPrayerModal 
-          onClose={() => setPrayerModalOpen(false)}
-          onAddPrayer={() => {}}
-        />
+            <div className="county-list">
+              {sampleCounties.map(c => (
+                <button 
+                  key={c}
+                  className={`county-select-btn ${currentCounty === c ? 'active' : ''}`}
+                  onClick={() => {
+                    setCurrentCounty(c);
+                    setCountyModalOpen(false);
+                  }}
+                >
+                  <MapPin size={16} />
+                  <span>{c}</span>
+                  {currentCounty === c && <Sparkles size={14} className="icon-emerald" />}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
       )}
 
       <style>{`
         .app-footer {
-          position: relative;
-          z-index: 10;
-          background: rgba(5, 10, 22, 0.92);
-          border-top: 1px solid rgba(251, 191, 36, 0.15);
-          padding: 24px 28px;
+          background: rgba(9, 19, 13, 0.9);
+          border-top: 1px solid var(--border-color);
+          padding: 20px 28px;
           margin-top: auto;
         }
 
         .footer-container {
-          max-width: 1400px;
+          max-width: 1480px;
           margin: 0 auto;
           display: flex;
           align-items: center;
           justify-content: space-between;
           flex-wrap: wrap;
-          gap: 16px;
+          gap: 12px;
         }
 
         .footer-brand {
           display: flex;
           align-items: center;
-          gap: 12px;
+          gap: 16px;
         }
 
         .footer-title {
-          font-family: var(--font-brand);
-          font-weight: 700;
-          font-size: 1.2rem;
+          font-weight: 800;
+          font-size: 1.1rem;
           color: #ffffff;
         }
 
-        .footer-byline {
-          font-size: 0.8rem;
-          color: #ebd5b3;
-          font-style: italic;
+        .footer-copy {
+          font-size: 0.82rem;
+          color: var(--text-secondary);
         }
 
-        .footer-copyright {
-          font-size: 0.82rem;
-          color: var(--text-muted);
+        .footer-badge {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+        }
+
+        .county-modal {
+          max-width: 460px;
+        }
+
+        .county-list {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+        }
+
+        .county-select-btn {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          background: rgba(9, 19, 13, 0.5);
+          border: 1px solid var(--border-color);
+          color: var(--text-secondary);
+          padding: 12px 16px;
+          border-radius: var(--radius-md);
+          font-size: 0.9rem;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s ease;
+        }
+
+        .county-select-btn:hover, .county-select-btn.active {
+          background: rgba(16, 185, 129, 0.2);
+          border-color: rgba(16, 185, 129, 0.5);
+          color: #ffffff;
         }
       `}</style>
     </div>
