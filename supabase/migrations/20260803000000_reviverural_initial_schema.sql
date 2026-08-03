@@ -1,6 +1,6 @@
 -- ==============================================================================
 -- REVIVE RURAL AI — DDL SCHEMA MIGRATION (FRESH TENANT DB)
--- Project: Revive Rural AI (ai.reviverural.com)
+-- Project: Revive Rural AI (ai.reviverural.us)
 -- Note: DDL Schema ONLY. Zero legacy seed records included.
 -- ==============================================================================
 
@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS public.organizations (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
     name TEXT NOT NULL DEFAULT 'Revive Rural Operations',
     slug TEXT UNIQUE NOT NULL DEFAULT 'revive-rural-main',
-    domain TEXT DEFAULT 'reviverural.com'
+    domain TEXT DEFAULT 'reviverural.us'
 );
 
 -- Enable RLS on Organizations
