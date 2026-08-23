@@ -8,6 +8,12 @@ on:
     paths:
       - 'apps/tcedc-field-route-android/**'
       - '.github/workflows/build-tcedc-android.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'apps/tcedc-field-route-android/**'
+      - '.github/workflows/build-tcedc-android.yml'
 
 permissions:
   contents: read
