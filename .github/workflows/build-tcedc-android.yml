@@ -4,6 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches:
+      - main
       - feat/tcedc-field-route-android
     paths:
       - 'apps/tcedc-field-route-android/**'
